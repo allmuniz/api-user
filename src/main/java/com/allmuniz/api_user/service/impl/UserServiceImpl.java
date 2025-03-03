@@ -1,5 +1,7 @@
 package com.allmuniz.api_user.service.impl;
 
+import com.allmuniz.api_user.controller.exception.UserFoundException;
+import com.allmuniz.api_user.controller.exception.UserNotFoundException;
 import com.allmuniz.api_user.domain.dto.UserRequestDto;
 import com.allmuniz.api_user.domain.dto.UserRequestUpdateDto;
 import com.allmuniz.api_user.domain.dto.UserResponseDto;
@@ -21,15 +23,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto create(UserRequestDto user) {
-        User newUser = new User(user);
-        userRepository.save(newUser);
-        return new  UserResponseDto(newUser.getName(), newUser.getEmail());
+        try {
+            User newUser = new User(user);
+            userRepository.save(newUser);
+            return new  UserResponseDto(newUser.getId(), newUser.getName(), newUser.getEmail());
+        }catch(Exception e) {
+            throw new UserFoundException("User already created");
+        }
     }
 
     @Override
     public UserResponseDto findById(Long id) {
         Optional<User> user = userRepository.findById(id);
-        return user.map(value -> new UserResponseDto(value.getName(), value.getEmail())).orElse(null);
+        return user.map(value -> new UserResponseDto(value.getId(), value.getName(), value.getEmail()))
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
     @Override
@@ -41,13 +48,15 @@ public class UserServiceImpl implements UserService {
             updateUser.setEmail(user.email());
             updateUser.setPassword(user.password());
             userRepository.save(updateUser);
-            return new UserResponseDto(updateUser.getName(), updateUser.getEmail());
+            return new UserResponseDto(updateUser.getId(), updateUser.getName(), updateUser.getEmail());
+        }else {
+            throw new UserNotFoundException("User not found");
         }
-        return null;
     }
 
     @Override
     public void delete(Long id) {
-        userRepository.deleteById(id);
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
+        userRepository.deleteById(user.getId());
     }
 }
