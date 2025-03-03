@@ -1,5 +1,6 @@
 package com.allmuniz.api_user.domain.model;
 
+import com.allmuniz.api_user.domain.dto.UserRequestDto;
 import jakarta.persistence.*;
 
 @Entity(name = "tb_user")
@@ -17,6 +18,11 @@ public class User {
     private String password;
 
     public User() {
+    }
+
+    public User(UserRequestDto user) {
+        this.name = user.name();
+        this.email = user.email();
     }
 
     public Long getId() {
