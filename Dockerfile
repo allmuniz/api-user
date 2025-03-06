@@ -11,9 +11,9 @@ COPY . /app/
 RUN chmod +x gradlew
 
 # Rodando o Gradle para compilar o projeto e gerar o JAR
-RUN ./gradlew build -x test
+RUN ./gradlew clean build -x test
 
-# Copiando o arquivo JAR para o container
+# Agora copiamos o arquivo JAR gerado para o container
 COPY build/libs/api-user-*.jar /app/api-user.jar
 
 # Expondo a porta que o Spring Boot irá utilizar (padrão 8080)
