@@ -26,6 +26,13 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+tasks.jar {
+	manifest {
+		attributes 'Main-Class': 'com.allmuniz.api_user.ApiUserApplication'
+	}
+}
+
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
