@@ -4,7 +4,7 @@ FROM openjdk:21-jdk-slim as build
 # Definindo o diretório de trabalho dentro do container
 WORKDIR /app
 
-# Copiando os arquivos necessários para o container
+# Copiando o código fonte para o container
 COPY . /app/
 
 # Garantindo que o gradlew tenha permissões de execução
@@ -14,6 +14,7 @@ RUN chmod +x gradlew
 RUN ./gradlew clean build -x test
 
 # Agora copiamos o arquivo JAR gerado para o container
+# Isso será feito após o build com o caminho correto
 COPY build/libs/api-user-*.jar /app/api-user.jar
 
 # Expondo a porta que o Spring Boot irá utilizar (padrão 8080)
