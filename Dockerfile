@@ -14,11 +14,11 @@ RUN chmod +x gradlew
 RUN ./gradlew clean build -x test
 
 # A partir daqui, o arquivo JAR gerado deve estar em /app/build/libs/
-# Verifique se o arquivo JAR está no diretório correto
+# Verificando se o arquivo JAR está no diretório correto
 RUN ls -la /app/build/libs
 
-# Agora copiamos o arquivo JAR gerado para o container
-COPY /app/build/libs/api-user-*.jar /app/api-user.jar
+# Copiando o arquivo JAR gerado para o container
+COPY build/libs/api-user-*.jar /app/api-user.jar
 
 # Expondo a porta que o Spring Boot irá utilizar (padrão 8080)
 EXPOSE 8080
