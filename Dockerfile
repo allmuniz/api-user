@@ -7,6 +7,9 @@ WORKDIR /app
 # Copiando os arquivos necessários para o container
 COPY . /app/
 
+# Garantindo que o gradlew tenha permissões de execução
+RUN chmod +x gradlew
+
 # Rodando o Gradle para compilar o projeto e gerar o JAR
 RUN ./gradlew build -x test
 
