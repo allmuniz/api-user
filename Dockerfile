@@ -4,6 +4,12 @@ FROM openjdk:21-jdk-slim as build
 # Definindo o diretório de trabalho dentro do container
 WORKDIR /app
 
+# Copiando os arquivos necessários para o container
+COPY . /app/
+
+# Rodando o Gradle para compilar o projeto e gerar o JAR
+RUN ./gradlew build -x test
+
 # Copiando o arquivo JAR para o container
 COPY build/libs/api-user-*.jar /app/api-user.jar
 
